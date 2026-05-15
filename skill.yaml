@@ -1,0 +1,39 @@
+name: skill-office-reminder
+version: 0.1.0
+mode: local_plugin
+entrypoint: src.skill_office_reminder.main:Skill
+core_api: ">=1.0,<2.0"
+capabilities:
+  - id: office_reminder.create_reminder
+    description: Preview or create an office reminder in the local reminder store.
+    input_schema:
+      type: object
+    output_schema:
+      type: object
+    risk_level: medium
+    confirmation_required: true
+    retry_policy: manual_review
+    observability_events:
+      - office_reminder.create_reminder
+  - id: office_reminder.list_reminders
+    description: List saved office reminders from local storage.
+    input_schema:
+      type: object
+    output_schema:
+      type: object
+    risk_level: low
+    confirmation_required: false
+    retry_policy: bounded_backoff
+    observability_events:
+      - office_reminder.list_reminders
+permissions:
+  read_memory: false
+  write_memory: false
+  internet_access: false
+  file_write: true
+  external_actions: false
+healthcheck:
+  kind: python
+  target: src.skill_office_reminder.main:healthcheck
+timeout_ms: 60000
+enabled_by_default: true
